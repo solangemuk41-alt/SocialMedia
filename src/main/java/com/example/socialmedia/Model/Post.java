@@ -1,6 +1,7 @@
 package com.example.socialmedia.Model;
 
 import com.example.socialmedia.Model.Author;
+import com.fasterxml.jackson.databind.BeanProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
+
+    public BeanProperty getCreatedBy() {
+    }
 
     public enum Visibility {
         PUBLIC,

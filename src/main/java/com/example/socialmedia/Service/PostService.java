@@ -156,7 +156,7 @@ public class PostService {
                 .content(post.getContent())
                 .visibility(post.getVisibility())
                 .createdAt(post.getCreatedAt())
-                .createdBy(post.getCreatedBy().getFullName())
+                .createdBy(String.valueOf(post.getCreatedBy().getFullName()))
                 .build();
     }
 }

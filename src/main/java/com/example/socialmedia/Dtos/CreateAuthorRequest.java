@@ -22,4 +22,7 @@ public class CreateAuthorRequest {
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")
     private String email;
+
+    public String getPost() {
+    }
 }
