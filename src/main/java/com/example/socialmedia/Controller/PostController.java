@@ -19,7 +19,6 @@ public class PostController {
 
     private final PostService postService;
 
-    // CREATE POST
     @PostMapping
     public ResponseEntity<PostResponse> createPost(
             @Valid @RequestBody CreatePostRequest request) {
@@ -28,19 +27,16 @@ public class PostController {
                 .body(postService.createPost(request));
     }
 
-    // GET ALL POSTS
     @GetMapping
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
     }
 
-    // GET POST BY ID
     @GetMapping("/{id}")
     public ResponseEntity<PostResponse> getPostById(@PathVariable Long id) {
         return ResponseEntity.ok(postService.getPostById(id));
     }
 
-    // GET POSTS BY AUTHOR
     @GetMapping("/author/{authorId}")
     public ResponseEntity<List<PostResponse>> getPostsByAuthor(
             @PathVariable Long authorId) {
@@ -48,7 +44,6 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostsByAuthor(authorId));
     }
 
-    // GET POSTS BY PERIOD
     @GetMapping("/period")
     public ResponseEntity<List<PostResponse>> getPostsByPeriod(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -60,7 +55,6 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostsByPeriod(start, end));
     }
 
-    // UPDATE POST
     @PutMapping("/{id}")
     public ResponseEntity<PostResponse> updatePost(
             @PathVariable Long id,
@@ -69,15 +63,12 @@ public class PostController {
         return ResponseEntity.ok(postService.updatePost(id, request));
     }
 
-    // DELETE POST BY ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable Long id) {
 
         postService.deletePostById(id);
         return ResponseEntity.noContent().build();
     }
-
-    // DELETE POSTS BY AUTHOR
     @DeleteMapping("/author/{authorId}")
     public ResponseEntity<Void> deletePostsByAuthor(@PathVariable Long authorId) {
 
@@ -85,7 +76,6 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE POST BY AUTHOR VALIDATION
     @DeleteMapping("/{postId}/author/{authorId}")
     public ResponseEntity<Void> deletePostByIdAndAuthor(
             @PathVariable Long postId,
@@ -95,7 +85,6 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE BY PERIOD
     @DeleteMapping("/period")
     public ResponseEntity<Void> deletePostsByPeriod(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

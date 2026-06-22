@@ -43,7 +43,6 @@ public class PostService {
         return mapToResponse(saved, "Post created successfully");
     }
 
-    // GET ALL POSTS
     public List<PostResponse> getAllPosts() {
         return postRepository.findAll()
                 .stream()
@@ -51,7 +50,6 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    // GET POST BY ID
     public PostResponse getPostById(Long id) {
 
         Post post = postRepository.findById(id)
@@ -61,7 +59,7 @@ public class PostService {
         return mapToResponse(post, "Post found");
     }
 
-    // GET POSTS BY AUTHOR
+
     public List<PostResponse> getPostsByAuthor(Long authorId) {
 
         if (!authorRepository.existsById(authorId)) {
@@ -74,7 +72,6 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    // GET POSTS BY PERIOD
     public List<PostResponse> getPostsByPeriod(LocalDateTime start, LocalDateTime end) {
         return postRepository.findByCreatedAtBetween(start, end)
                 .stream()
@@ -82,7 +79,6 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    // UPDATE POST
     @Transactional
     public PostResponse updatePost(Long id, UpdatePostRequest request) {
 
@@ -101,7 +97,6 @@ public class PostService {
         return mapToResponse(postRepository.save(post), "Post updated successfully");
     }
 
-    // DELETE POST BY ID
     @Transactional
     public String deletePostById(Long id) {
 
@@ -114,7 +109,6 @@ public class PostService {
         return "Post '" + post.getTitle() + "' deleted successfully";
     }
 
-    // DELETE POSTS BY AUTHOR
     @Transactional
     public String deletePostsByAuthor(Long authorId) {
 
@@ -127,7 +121,6 @@ public class PostService {
         return "All posts by author " + authorId + " deleted successfully";
     }
 
-    // DELETE POST BY AUTHOR VALIDATION
     @Transactional
     public String deletePostByIdAndAuthor(Long postId, Long authorId) {
 
@@ -145,7 +138,7 @@ public class PostService {
         return "Post deleted successfully";
     }
 
-    // DELETE BY PERIOD
+
     @Transactional
     public String deletePostsByPeriod(LocalDateTime start, LocalDateTime end) {
 
@@ -156,7 +149,6 @@ public class PostService {
         return posts.size() + " posts deleted successfully";
     }
 
-    // MAPPER
     private PostResponse mapToResponse(Post post, String message) {
         return PostResponse.builder()
                 .message(message)

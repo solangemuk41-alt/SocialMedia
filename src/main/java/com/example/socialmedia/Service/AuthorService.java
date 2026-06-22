@@ -18,9 +18,7 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
 
-    // ─────────────────────────────
-    // CREATE AUTHOR
-    // ─────────────────────────────
+
     public AuthorResponse createAuthor(CreateAuthorRequest request) {
 
         validateUniqueUsernameAndEmail(request.getUsername(), request.getEmail());
@@ -36,16 +34,11 @@ public class AuthorService {
         return mapToResponse(saved, "Author created successfully");
     }
 
-    // ─────────────────────────────
-    // GET BY ID
-    // ─────────────────────────────
+
     public AuthorResponse getAuthorById(Long id) {
         return mapToResponse(findAuthorById(id), "Author found");
     }
 
-    // ─────────────────────────────
-    // GET BY USERNAME
-    // ─────────────────────────────
     public AuthorResponse getAuthorByUsername(String username) {
         Author author = authorRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -54,9 +47,7 @@ public class AuthorService {
         return mapToResponse(author, "Author found");
     }
 
-    // ─────────────────────────────
-    // GET BY EMAIL
-    // ─────────────────────────────
+
     public AuthorResponse getAuthorByEmail(String email) {
         Author author = authorRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -65,9 +56,6 @@ public class AuthorService {
         return mapToResponse(author, "Author found");
     }
 
-    // ─────────────────────────────
-    // GET ALL AUTHORS
-    // ─────────────────────────────
     public List<AuthorResponse> getAllAuthors() {
         return authorRepository.findAll()
                 .stream()
@@ -75,9 +63,6 @@ public class AuthorService {
                 .collect(Collectors.toList());
     }
 
-    // ─────────────────────────────
-    // GET BY PERIOD
-    // ─────────────────────────────
     public List<AuthorResponse> getAuthorsByPeriod(LocalDateTime start, LocalDateTime end) {
         return authorRepository.findByCreatedAtBetween(start, end)
                 .stream()
@@ -85,9 +70,6 @@ public class AuthorService {
                 .collect(Collectors.toList());
     }
 
-    // ─────────────────────────────
-    // UPDATE BIO
-    // ─────────────────────────────
     @Transactional
     public AuthorResponse updateBio(Long id, String bio) {
         Author author = findAuthorById(id);
@@ -96,9 +78,6 @@ public class AuthorService {
         return mapToResponse(authorRepository.save(author), "Bio updated successfully");
     }
 
-    // ─────────────────────────────
-    // UPDATE AUTHOR
-    // ─────────────────────────────
     @Transactional
     public AuthorResponse updateAuthor(Long id, UpdateAuthorRequest request) {
 
@@ -132,9 +111,6 @@ public class AuthorService {
                 "Author profile updated successfully");
     }
 
-    // ─────────────────────────────
-    // DELETE AUTHOR
-    // ─────────────────────────────
     @Transactional
     public String deleteAuthor(Long id) {
         Author author = findAuthorById(id);
@@ -143,9 +119,6 @@ public class AuthorService {
         return "Author '" + author.getUsername() + "' deleted successfully";
     }
 
-    // ─────────────────────────────
-    // PRIVATE HELPERS
-    // ─────────────────────────────
     private Author findAuthorById(Long id) {
         return authorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
