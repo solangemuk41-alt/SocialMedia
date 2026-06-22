@@ -1,4 +1,4 @@
-package org.example.socialmedia;
+package com.example.socialmedia;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

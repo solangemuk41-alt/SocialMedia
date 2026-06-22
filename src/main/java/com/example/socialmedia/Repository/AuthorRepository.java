@@ -1,9 +1,7 @@
-package com.socialmedia.repository;
+package com.example.socialmedia.Repository;
 
-import com.socialmedia.entity.Author;
+import com.example.socialmedia.Model.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -17,9 +15,9 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     Optional<Author> findByEmail(String email);
 
-    List<Author> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
-
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+
+    List<Author> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }

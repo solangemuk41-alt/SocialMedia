@@ -1,15 +1,14 @@
-package com.socialmedia.dto.response;
+package com.example.socialmedia.Dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AuthorResponse {
+
     private String message;
     private String fullName;
     private String username;
