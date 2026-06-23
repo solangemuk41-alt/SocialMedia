@@ -53,12 +53,15 @@ public class PostService {
         return mapToResponse(post, "Post found");
     }
 
+
     public List<PostResponse> getPostsByAuthor(Long authorId) {
+
         if (!authorRepository.existsById(authorId)) {
             throw new ResourceNotFoundException(
                     "Author not found with id: " + authorId);
         }
-        return postRepository.findByAuthor_Id(authorId)
+
+        return postRepository.findByCreatedBy_Id(authorId)
                 .stream()
                 .map(p -> mapToResponse(p, ""))
                 .collect(Collectors.toList());
@@ -71,8 +74,10 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+
     @Transactional
     public PostResponse updatePost(Long id, UpdatePostRequest request) {
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Post not found with id: " + id));
@@ -87,6 +92,7 @@ public class PostService {
         return mapToResponse(postRepository.save(post), "Post updated successfully");
     }
 
+
     @Transactional
     public String deletePostById(Long id) {
         Post post = postRepository.findById(id)
@@ -96,13 +102,16 @@ public class PostService {
         return "Post '" + post.getTitle() + "' deleted successfully";
     }
 
+
     @Transactional
     public String deletePostsByAuthor(Long authorId) {
+
         if (!authorRepository.existsById(authorId)) {
             throw new ResourceNotFoundException(
                     "Author not found with id: " + authorId);
         }
-        postRepository.deleteByAuthor_Id(authorId);
+
+        postRepository.deleteByCreatedBy_Id(authorId);
         return "All posts by author " + authorId + " deleted successfully";
     }
 
@@ -111,6 +120,7 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Post not found with id: " + postId));
+
 
         if (!post.getCreatedBy().getId().equals(authorId)) {
             throw new IllegalArgumentException(
@@ -135,7 +145,7 @@ public class PostService {
                 .content(post.getContent())
                 .visibility(post.getVisibility())
                 .createdAt(post.getCreatedAt())
-                .createdBy(post.getCreatedBy().getFullName())
+                .createdBy(post.getCreatedBy().getFullName())  // zana amazina ya author
                 .build();
     }
 }
