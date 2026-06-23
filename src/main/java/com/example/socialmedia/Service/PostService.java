@@ -32,7 +32,7 @@ public class PostService {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .visibility(request.getVisibility())
-                .author(author)
+                .createdBy(author)
                 .build();
 
         Post saved = postRepository.save(post);
@@ -58,7 +58,7 @@ public class PostService {
             throw new ResourceNotFoundException(
                     "Author not found with id: " + authorId);
         }
-        return postRepository.findByAuthorId(authorId)
+        return postRepository.findByAuthor_Id(authorId)
                 .stream()
                 .map(p -> mapToResponse(p, ""))
                 .collect(Collectors.toList());
@@ -102,7 +102,7 @@ public class PostService {
             throw new ResourceNotFoundException(
                     "Author not found with id: " + authorId);
         }
-        postRepository.deleteByAuthorId(authorId);
+        postRepository.deleteByAuthor_Id(authorId);
         return "All posts by author " + authorId + " deleted successfully";
     }
 
@@ -112,9 +112,9 @@ public class PostService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Post not found with id: " + postId));
 
-        if (!post.getAuthor().getId().equals(authorId)) {
+        if (!post.getCreatedBy().getId().equals(authorId)) {
             throw new IllegalArgumentException(
-                    "This author did not create this post");
+                    "Author with id " + authorId + " did not create this post");
         }
 
         postRepository.delete(post);
@@ -135,7 +135,7 @@ public class PostService {
                 .content(post.getContent())
                 .visibility(post.getVisibility())
                 .createdAt(post.getCreatedAt())
-                .createdBy(post.getAuthor().getFullName())
+                .createdBy(post.getCreatedBy().getFullName())
                 .build();
     }
 }

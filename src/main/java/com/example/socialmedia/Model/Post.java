@@ -28,9 +28,9 @@ public class Post {
 
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private Author author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author createdBy;
 
     @PrePersist
     public void prePersist() {
