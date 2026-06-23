@@ -24,5 +24,6 @@ public class CreateAuthorRequest {
     private String email;
 
     public String getPost() {
+        return "";
     }
 }

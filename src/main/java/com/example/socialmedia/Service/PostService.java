@@ -10,10 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +21,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final AuthorRepository authorRepository;
 
-    // CREATE POST
+
     public PostResponse createPost(CreatePostRequest request) {
 
         Author author = authorRepository.findById(request.getAuthorId())
@@ -36,7 +32,7 @@ public class PostService {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .visibility(request.getVisibility())
-                .createdBy(author)
+                .author(author)
                 .build();
 
         Post saved = postRepository.save(post);
@@ -51,22 +47,18 @@ public class PostService {
     }
 
     public PostResponse getPostById(Long id) {
-
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Post not found with id: " + id));
-
         return mapToResponse(post, "Post found");
     }
 
-
     public List<PostResponse> getPostsByAuthor(Long authorId) {
-
         if (!authorRepository.existsById(authorId)) {
-            throw new ResourceNotFoundException("Author not found with id: " + authorId);
+            throw new ResourceNotFoundException(
+                    "Author not found with id: " + authorId);
         }
-
-        return postRepository.findByCreatedById(authorId)
+        return postRepository.findByAuthorId(authorId)
                 .stream()
                 .map(p -> mapToResponse(p, ""))
                 .collect(Collectors.toList());
@@ -81,7 +73,6 @@ public class PostService {
 
     @Transactional
     public PostResponse updatePost(Long id, UpdatePostRequest request) {
-
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Post not found with id: " + id));
@@ -89,7 +80,6 @@ public class PostService {
         if (request.getTitle() != null && !request.getTitle().isBlank()) {
             post.setTitle(request.getTitle());
         }
-
         if (request.getContent() != null && !request.getContent().isBlank()) {
             post.setContent(request.getContent());
         }
@@ -99,53 +89,42 @@ public class PostService {
 
     @Transactional
     public String deletePostById(Long id) {
-
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Post not found with id: " + id));
-
         postRepository.delete(post);
-
         return "Post '" + post.getTitle() + "' deleted successfully";
     }
 
     @Transactional
     public String deletePostsByAuthor(Long authorId) {
-
         if (!authorRepository.existsById(authorId)) {
-            throw new ResourceNotFoundException("Author not found with id: " + authorId);
+            throw new ResourceNotFoundException(
+                    "Author not found with id: " + authorId);
         }
-
-        postRepository.deleteByCreatedById(authorId);
-
+        postRepository.deleteByAuthorId(authorId);
         return "All posts by author " + authorId + " deleted successfully";
     }
 
     @Transactional
     public String deletePostByIdAndAuthor(Long postId, Long authorId) {
-
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Post not found with id: " + postId));
 
-        if (!post.getCreatedBy().getId().equals(authorId)) {
+        if (!post.getAuthor().getId().equals(authorId)) {
             throw new IllegalArgumentException(
-                    "Author did not create this post");
+                    "This author did not create this post");
         }
 
         postRepository.delete(post);
-
         return "Post deleted successfully";
     }
 
-
     @Transactional
     public String deletePostsByPeriod(LocalDateTime start, LocalDateTime end) {
-
         List<Post> posts = postRepository.findByCreatedAtBetween(start, end);
-
         postRepository.deleteAll(posts);
-
         return posts.size() + " posts deleted successfully";
     }
 
@@ -156,7 +135,7 @@ public class PostService {
                 .content(post.getContent())
                 .visibility(post.getVisibility())
                 .createdAt(post.getCreatedAt())
-                .createdBy(String.valueOf(post.getCreatedBy().getFullName()))
+                .createdBy(post.getAuthor().getFullName())
                 .build();
     }
 }

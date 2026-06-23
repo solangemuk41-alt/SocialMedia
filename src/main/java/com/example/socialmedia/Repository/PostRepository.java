@@ -10,17 +10,10 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    List<Post> findByCreatedById(Long authorId);
 
-    void deleteByCreatedById(Long authorId);
+    List<Post> findByAuthorId(Long authorId);
 
-    void deleteByIdAndCreatedById(Long postId, Long authorId);
+    void deleteByAuthorId(Long authorId);
 
     List<Post> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
-
-    List<Post> findByCreatedByIdAndCreatedAtBetween(
-            Long authorId,
-            LocalDateTime start,
-            LocalDateTime end
-    );
 }

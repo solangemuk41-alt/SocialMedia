@@ -1,15 +1,13 @@
 package com.example.socialmedia.Model;
 
-import com.example.socialmedia.Model.Author;
-import com.fasterxml.jackson.databind.BeanProperty;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,7 +23,8 @@ public class Post {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private Visibility visibility;
+    @Builder.Default
+    private Visibility visibility = Visibility.PUBLIC;
 
     private LocalDateTime createdAt;
 
@@ -33,7 +32,9 @@ public class Post {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    public BeanProperty getCreatedBy() {
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public enum Visibility {
