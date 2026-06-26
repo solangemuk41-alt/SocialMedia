@@ -26,7 +26,7 @@ public class CreatePostRequest {
     @NotNull(message = "Author ID is required")
     private Long authorId;
 
-    public Post.Visibility getVisibility() {
-        return null;
-    }
+    private Post.Visibility visibility = Post.Visibility.PUBLIC;
+
+
 }
